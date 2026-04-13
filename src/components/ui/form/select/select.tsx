@@ -17,7 +17,7 @@ import Select, {
 } from 'react-select';
 
 import { FieldWrapper } from '@/components/ui/form/field-wrapper';
-import { type SelectOption } from '@/types/select';
+import { type SelectOption } from '@/types';
 import { cn } from '@/utils/theme';
 
 import { selectStyles } from './style';
@@ -56,17 +56,18 @@ type SelectComponentProps<T extends FieldValues> = {
   onClear?: VoidFunction;
   className?: string | undefined;
   formatOptionLabel?:
-    | ((
-        data: SelectOption | GroupBase<SelectOption>,
-        formatOptionLabelMeta: FormatOptionLabelMeta<
-          SelectOption | GroupBase<SelectOption>
-        >,
-      ) => React.ReactNode)
-    | undefined;
+  | ((
+    data: SelectOption | GroupBase<SelectOption>,
+    formatOptionLabelMeta: FormatOptionLabelMeta<
+      SelectOption | GroupBase<SelectOption>
+    >,
+  ) => React.ReactNode)
+  | undefined;
   valueId?: string;
   maxMenuHeight?: number;
   menuPlacement?: MenuPlacement | undefined;
   onMenuScrollToBottom?: ((event: WheelEvent | TouchEvent) => void) | undefined;
+  useMinWidth?: boolean;
 };
 
 export function SelectComponent<T extends FieldValues>({
@@ -88,6 +89,7 @@ export function SelectComponent<T extends FieldValues>({
   maxMenuHeight,
   menuPlacement,
   onMenuScrollToBottom,
+  useMinWidth = true,
 }: SelectComponentProps<T>) {
   const handleSelectChange = ({
     option,
@@ -95,8 +97,8 @@ export function SelectComponent<T extends FieldValues>({
     actionCtx,
   }: {
     option:
-      | MultiValue<SelectOption | GroupBase<SelectOption>>
-      | SingleValue<SelectOption | GroupBase<SelectOption>>;
+    | MultiValue<SelectOption | GroupBase<SelectOption>>
+    | SingleValue<SelectOption | GroupBase<SelectOption>>;
     controllerOnChange?: (...event: unknown[]) => void;
     actionCtx: ActionMeta<SelectOption | GroupBase<SelectOption>>;
   }) => {
@@ -200,6 +202,9 @@ export function SelectComponent<T extends FieldValues>({
                           ? controlStyles.focus
                           : controlStyles.nonFocus,
                         controlStyles.base,
+                        {
+                          'min-w-[180px]': useMinWidth,
+                        },
                         isDisabled && 'opacity-50',
                       ),
                     placeholder: () => placeholderStyles,
@@ -259,6 +264,9 @@ export function SelectComponent<T extends FieldValues>({
               cn(
                 isFocused ? controlStyles.focus : controlStyles.nonFocus,
                 controlStyles.base,
+                {
+                  'min-w-[180px]': useMinWidth,
+                },
                 isDisabled && 'opacity-50',
               ),
             placeholder: () => placeholderStyles,
