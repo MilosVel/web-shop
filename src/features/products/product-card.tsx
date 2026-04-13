@@ -24,7 +24,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             <CardHeader>
                 <CardTitle>{product.name}</CardTitle>
                 <CardDescription className="text-[1rem] text-foreground mt-1">
-                    Total shifts:{' '}
+                    Ukupno komada:{' '}
                     <span className="font-semibold">{222}</span>
                 </CardDescription>
             </CardHeader>
