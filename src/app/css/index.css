@@ -1,0 +1,344 @@
+@import "./datepicker.css";
+@import "./custom.css";
+
+@import "tailwindcss";
+@plugin 'tailwindcss-animate';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-lexend: "Lexend";
+  --font-inter: "Inter";
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+
+  --color-purple: hsl(var(--purple));
+  --color-purple-foreground: hsl(var(--purple-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-sidebar-background: hsl(var(--sidebar-color));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+  @media (width >= 2560px) {
+    max-width: 2560px;
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222 95% 60%;
+    --primary-foreground: 222 88% 74%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 48 96% 89%;
+
+    --success: 132 82% 39%;
+    --success-foreground: 133 93% 89%;
+
+    --purple: 271 91% 65%;
+    --purple-foreground: 270 100% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --shift-assigned-bg: 0.976 0.026 212.72 / 0.4;
+    --shift-assigned-border: 82.8% 0.189 84.429;
+    --shift-assigned-text: 82.8% 0.189 84.429;
+
+    --shift-accepted-bg: 0.967 0.024 252.25 / 0.4;
+    --shift-accepted-border: 90.5% 0.182 98.111;
+    --shift-accepted-text: 90.5% 0.182 98.111;
+
+    --shift-in-progress-bg: 0.918 0.058 252.25;
+    --shift-in-progress-border: 93.8% 0.127 124.321;
+    --shift-in-progress-text: 93.8% 0.127 124.321;
+
+    --shift-completed-bg: 0.961 0.032 150.73 / 0.9;
+    --shift-completed-border: 84.1% 0.238 128.85;
+    --shift-completed-text: 84.1% 0.238 128.85;
+
+    --shift-in-review-bg: 0.972 0.017 307.891 / 0.9;
+    --shift-in-review-border: 94.5% 0.129 101.54;
+    --shift-in-review-text: 94.5% 0.129 101.54;
+
+    --shift-open-bg: 0.977 0.013 83.633 / 0.9;
+    --shift-open-border: 82.8% 0.189 84.429;
+    --shift-open-text: 82.8% 0.189 84.429;
+
+    --shift-canceled-bg: 0.971 0.016 17.38 / 0.9;
+    --shift-canceled-border: 63.7% 0.237 25.331;
+    --shift-canceled-text: 63.7% 0.237 25.331;
+
+    --shift-deleted-bg: 0.985 0.001 106.423 / 0.5;
+    --shift-deleted-border: 87.2% 0.01 258.338;
+    --shift-deleted-text: 87.2% 0.01 258.338;
+
+    --shift-draft-bg: 0.985 0.002 247.839 / 0.9;
+    --shift-draft-border: 87.2% 0.01 258.338;
+    --shift-draft-text: 87.2% 0.01 258.338;
+
+    --shift-cancel-requested-bg: 0.978 0.009 328.363 / 0.5;
+    --shift-cancel-requested-border: 70.4% 0.191 22.216;
+    --shift-cancel-requested-text: 70.4% 0.191 22.216;
+  }
+
+  .dark {
+    --background: 120 3% 12%;
+    --foreground: 35 45% 86%;
+
+    --card: 120 3% 12%;
+    --card-foreground: 35 45% 86%;
+
+    --popover: 120 3% 12%;
+    --popover-foreground: 35 45% 86%;
+
+    --primary: 120 8% 45%;
+    --primary-foreground: 35 45% 86%;
+
+    --secondary: 60 3% 24%;
+    --secondary-foreground: 35 45% 86%;
+
+    --muted: 60 3% 24%;
+    --muted-foreground: 35 45% 86%;
+
+    --accent: 120 8% 45%;
+    --accent-foreground: 35 45% 86%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 35 45% 86%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 35 45% 86%;
+
+    --success: 132 70% 25%;
+    --success-foreground: 35 45% 86%;
+
+    --purple: 271 81% 45%;
+    --purple-foreground: 35 45% 86%;
+
+    --border: 60 3% 24%;
+    --input: 60 3% 24%;
+    --ring: 120 8% 45%;
+
+    --map-stroke: 120 8% 45%;
+    --map-fill: 120 8% 45%;
+    --tab-active: 120 8% 45%;
+    --tab-inactive: 60 3% 24%;
+    --window-controls-red: 0 98% 60%;
+    --window-controls-yellow: 38 98% 60%;
+    --window-controls-green: 132 98% 60%;
+    --window-divider: 60 3% 24%;
+    --window-text: 35 45% 86%;
+    --sidebar-color: 0 0% 5%;
+
+    --shift-assigned-bg: 0.142 0.045 232.72;
+    --shift-assigned-border: 87.9% 0.169 91.605;
+    --shift-assigned-text: 87.9% 0.169 91.605;
+
+    --shift-accepted-bg: 0.155 0.055 254.139;
+    --shift-accepted-border: 92.4% 0.12 95.746;
+    --shift-accepted-text: 92.4% 0.12 95.746;
+
+    --shift-in-progress-bg: 0.155 0.055 254.139;
+    --shift-in-progress-border: 93.8% 0.127 124.321;
+    --shift-in-progress-text: 93.8% 0.127 124.321;
+
+    --shift-completed-bg: 0.154 0.049 158.994;
+    --shift-completed-border: 84.1% 0.238 128.85;
+    --shift-completed-text: 84.1% 0.238 128.85;
+
+    --shift-in-review-bg: 0.181 0.052 309.117;
+    --shift-in-review-border: 94.5% 0.129 101.54;
+    --shift-in-review-text: 94.5% 0.129 101.54;
+
+    --shift-open-bg: 0.128 0.029 65.364;
+    --shift-open-border: 87.9% 0.169 91.605;
+    --shift-open-text: 87.9% 0.169 91.605;
+
+    --shift-canceled-bg: 0.151 0.047 27.325;
+    --shift-canceled-border: 63.7% 0.237 25.331;
+    --shift-canceled-text: 63.7% 0.237 25.331;
+
+    --shift-deleted-bg: 0.147 0.004 49.25;
+    --shift-deleted-border: 87.2% 0.01 258.338;
+    --shift-deleted-text: 87.2% 0.01 258.338;
+
+    --shift-draft-bg: 0.13 0.028 261.692;
+    --shift-draft-border: 87.2% 0.01 258.338;
+    --shift-draft-text: 87.2% 0.01 258.338;
+
+    --shift-cancel-requested-bg: 0.181 0.052 328.363;
+    --shift-cancel-requested-border: 70.4% 0.191 22.216;
+    --shift-cancel-requested-text: 70.4% 0.191 22.216;
+  }
+}
+
+@layer base {
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../../assets/fonts/Inter-Regular.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Lexend";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../../assets/fonts/LexendDeca-Regular.ttf") format("truetype");
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply h-full antialiased;
+  }
+
+  body {
+    @apply bg-background font-inter text-foreground flex min-h-full flex-col overflow-x-hidden text-sm;
+  }
+
+  input::-ms-clear,
+  input::-ms-reveal {
+    @apply hidden;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    @apply m-0 appearance-none;
+  }
+
+  input[type="checkbox"]:checked {
+    @apply bg-none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-lexend text-foreground;
+  }
+
+  h1 {
+    @apply text-xl;
+  }
+
+  h2 {
+    @apply text-lg;
+  }
+}
