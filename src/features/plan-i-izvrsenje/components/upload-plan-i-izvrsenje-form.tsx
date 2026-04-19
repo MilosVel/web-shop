@@ -10,6 +10,7 @@ import { readSchemaParsedExcelFile, readMultipleExcelSheets } from "@/utils/mana
 import { planSchema, planItem, izvrsenjeSchema, izvrsenjeHeaderMap, izvrsenjeItem } from "@/features/plan-i-izvrsenje/schemas";
 import { createPlanIIzvrsenje } from "@/features/plan-i-izvrsenje/actions";
 import { SKIP_ROWS_SPIRI } from '@/shared/constants';
+import * as XLSX from 'xlsx'
 
 export function UploadPlanIIzvrsenjeDataForm({ closeCreteTable }: { closeCreteTable: () => void }) {
     const [percentageUploaded, setPercentageUploaded] = useState(0);
@@ -82,10 +83,17 @@ export function UploadPlanIIzvrsenjeDataForm({ closeCreteTable }: { closeCreteTa
             });
 
 
-            createPlanIIzvrsenje(izvrsenjeData, planData)
+            const {
+                planIIzvrsenje,
+                header
+            } = await createPlanIIzvrsenje(izvrsenjeData, planData)
 
-            // console.log('Izvrsenje data:', izvrsenjeData);
-            // console.log('Plan data:', planData);
+
+            const worksheet = XLSX.utils.json_to_sheet(planIIzvrsenje, { header })
+            const workbook = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet')
+
+            XLSX.writeFile(workbook, 'fileName.xlsx')
 
 
             setPercentageUploaded(100);
