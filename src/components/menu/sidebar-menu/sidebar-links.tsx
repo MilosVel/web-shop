@@ -25,6 +25,13 @@ export const initialSidebarLinks: AppLinkItem[] = [
     // checkPolicy: (permissions) => permissions?.agent?.view_agent_list?.read, // this need to be adjusted
   },
   {
+    name: 'Plan i izvrsenje',
+    icon: Sheet,
+    path: '/plan-i-izvrsenje',
+    group: 'Overview',
+    // checkPolicy: (permissions) => permissions?.users?.all_users?.read,
+  },
+  {
     name: 'Spiri',
     icon: DollarSign,
     path: '/spiri',
