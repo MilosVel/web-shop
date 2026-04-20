@@ -106,9 +106,9 @@ export function UploadPlanIIzvrsenjeDataForm({ closeCreteTable }: { closeCreteTa
 
 
             setPercentageUploaded(100);
-            toast.success('Podaci su uspešno učitani!', { // Ovaj toast nije kompatibilan ako user nema permisije ****
-                description: `Izvrsenje: ${izvrsenjeData.length} zapisa, Plan: ${planData.length} zapisa`,
-                duration: 3000,
+            toast.success('Vaš fajl možete preuzeti u downloads folderu', { // Ovaj toast nije kompatibilan ako user nema permisije ****
+                // description: `Izvrsenje: ${izvrsenjeData.length} zapisa, Plan: ${planData.length} zapisa`,
+                duration: 7000,
             });
 
             reset();
