@@ -3,10 +3,10 @@
 import { getCurrentUser } from "@/auth/nextjs/currentUser"
 
 import { canInsertPlanIIzvrsenje } from "@/features/plan-i-izvrsenje/permissions";
-import { planItem, izvrsenjeItem, ibkItem } from "@/features/plan-i-izvrsenje/schemas";
+import { planItem, izvrsenjeItem } from "@/features/plan-i-izvrsenje/schemas";
 
 
-import type { IzvrsenjeGrouped, PlanGrouped, GroupAndMergeResult } from "@/features/plan-i-izvrsenje/dto";
+import type { IzvrsenjeGrouped, PlanGrouped, GroupAndMergeResult, MergedRow } from "@/features/plan-i-izvrsenje/dto";
 
 
 export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planData: planItem[], ibkSet: Set<string> | undefined) {
@@ -50,7 +50,7 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
                     konto: key,
                     ukupno: duguje,
                     [item.izvor]: duguje,
-                });
+                } as IzvrsenjeGrouped);
             }
         });
 
@@ -91,7 +91,7 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
                 plan: planRow?.plan ?? 0,
                 ...izvorColumns,
                 ukupno: izvrsenjeRow?.ukupno ?? 0,
-            };
+            }  as MergedRow;
         }).sort((a, b) => a.konto.localeCompare(b.konto));
 
         const header = ['konto', 'plan', ...allIzvori, 'ukupno'];

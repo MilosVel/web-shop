@@ -1,23 +1,37 @@
 
-
-    export interface IzvrsenjeGrouped  {
+   export type IzvrsenjeGrouped = {
         jbkjs: string
         konto: string;
-        ukupno: number;
-        [izvor: string]: string | number;
-    };
+        ukupno: number
+    } & Record<string, number>
+
+    // export interface IzvrsenjeGrouped  {
+    //     jbkjs: string
+    //     konto: string;
+    //     ukupno: number;
+    //     [izvor: string]: string | number;
+    // };
 
     export interface PlanGrouped {
         konto: string;
         plan: number;
     };
 
-    export interface MergedRow {
+
+
+   export type MergedRow = {
         konto: string;
         ukupno: number;
         plan: number;
-        [izvor: string]: string | number | undefined;
-    };
+    } & Record<string, number>;
+
+    // export interface MergedRow {
+    //     konto: string;
+    //     ukupno: number;
+    //     plan: number;
+    //     [izvor: string]: number;
+    // };
+
 
     export interface GroupAndMergeResult {
         planIIzvrsenje: MergedRow[];
