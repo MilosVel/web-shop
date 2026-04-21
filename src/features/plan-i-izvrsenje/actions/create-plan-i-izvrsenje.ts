@@ -84,9 +84,15 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
         const allKonta = new Set([...izvrsenjeMap.keys(), ...planMap.keys()]);
 
 
-
-
-
+// const izvrsenjeBuzeta = 
+// Can you help me to create izvrsenjeBuzeta. Every konto ojb  in allKonta array has its aop in AOP_ARRAY. And I want to have this kind of structure
+// {IzvrsenjeBuzdetaExcel: [{konto: some valeue, plan: some value, ....allIzvori and valies for respective izvor, ukupno:somevalue that reresetns summ of allIzvori values}]
+// ispfiIzvrsenjeBuzeta: {
+//     aop1: [plan: some value for this aop, ....IspfiColumns and valies for respective column, ukupno:somevalue that reresetns summ of all IspfiColumns values fro this aop],
+//     ...
+// }
+// }
+// and to cosnole.log(izvrsenjeBuzeta)
 
 
 
@@ -97,6 +103,14 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
 
 
         const planIIzvrsenje = Array.from(allKonta).map((key) => {
+            // Here you can easily map aop and konto
+
+            const kontoNa6Nivou = key+'00'
+            const aop = AOP_ARRAY.find(item => {
+                return item.konto === +kontoNa6Nivou
+            })
+                
+            console.log('aop:', aop);
             const izvrsenjeRow = izvrsenjeMap.get(key);
             const planRow = planMap.get(key);
 
