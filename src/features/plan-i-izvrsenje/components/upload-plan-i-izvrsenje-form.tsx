@@ -130,12 +130,11 @@ export function UploadPlanIIzvrsenjeDataForm({
                 }
             });
 
-        console.log(IzvoriItems)
 
             const {
                 planIIzvrsenje,
                 header
-            } = await createPlanIIzvrsenje(izvrsenjeData, planData, ibkArray)
+            } = await createPlanIIzvrsenje(izvrsenjeData, planData, ibkArray, IzvoriItems)
 
             // Call the callback to pass data to parent component
             if (onDataProcessed) {

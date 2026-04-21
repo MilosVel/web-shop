@@ -3,13 +3,13 @@
 import { getCurrentUser } from "@/auth/nextjs/currentUser"
 
 import { canInsertPlanIIzvrsenje } from "@/features/plan-i-izvrsenje/permissions";
-import { planItem, izvrsenjeItem } from "@/features/plan-i-izvrsenje/schemas";
+import { planItem, izvrsenjeItem, izvorItem } from "@/features/plan-i-izvrsenje/schemas";
 
 
 import type { IzvrsenjeGrouped, PlanGrouped, GroupAndMergeResult, MergedRow } from "@/features/plan-i-izvrsenje/dto";
 
 
-export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planData: planItem[], ibkSet: Set<string> | undefined) {
+export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planData: planItem[], ibkSet: Set<string>, izvoriData: izvorItem[]) {
 
     const user = await getCurrentUser({ redirectIfNotFound: true })  // nece da radi bez ->   { redirectIfNotFound: true }   Proveriti zasto !!!!
 
@@ -70,7 +70,7 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
         });
 
         // ── collect all unique izvor values sorted ──
-        const allIzvori = [...new Set(izvrsenjeData.map(item => item.izvor))].sort();
+        const allIzvori = izvoriData.map(item => item.izvor).sort();
 
         // ── Full outer join ──
         const allKeys = new Set([...izvrsenjeMap.keys(), ...planMap.keys()]);
