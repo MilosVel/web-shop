@@ -1,6 +1,5 @@
 "use client";
 import { toast } from 'sonner';
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UploadInput } from "@/components/ui/form/upload-input";
 import { useState } from "react";
@@ -10,6 +9,11 @@ import { readSchemaParsedExcelFile, readMultipleExcelSheets } from "@/utils/mana
 import { planSchema, planItem, izvrsenjeSchema, izvrsenjeHeaderMap, izvrsenjeItem, ibkItem, IbkSchema } from "@/features/plan-i-izvrsenje/schemas";
 import { createPlanIIzvrsenje } from "@/features/plan-i-izvrsenje/actions";
 import { SKIP_ROWS_SPIRI } from '@/shared/constants';
+import { Controller, useForm } from 'react-hook-form';
+import { Input, Label } from '@/components/ui/form';
+import { Switch } from '@/components/ui/switch/switch';
+
+
 import type { GroupAndMergeResult } from "@/features/plan-i-izvrsenje/dto";
 
 export function UploadPlanIIzvrsenjeDataForm({ 
@@ -22,14 +26,19 @@ export function UploadPlanIIzvrsenjeDataForm({
     const [percentageUploaded, setPercentageUploaded] = useState(0);
     const [isProcessing, setIsProcessing] = useState(false);
 
+    // Uzor   Cancel shift in CA
     const {
         handleSubmit,
         control,
+        register,
         formState: { errors, isDirty },
         reset,
+        getValues
     } = useForm<ExceFileFormSchema>({
         defaultValues: {
             file: undefined,
+            IspfiFileName: '',
+            ispfi_izvestaj: false,
         },
         resolver: zodResolver(excelFileFileSchema),
     });
@@ -139,6 +148,39 @@ export function UploadPlanIIzvrsenjeDataForm({
                 error={errors.file as any}
                 percentageUploaded={percentageUploaded}
             />
+
+       <Controller
+                  control={control}
+                  name="ispfi_izvestaj"
+                  render={({ field }) => (
+                    <div className="items-center flex gap-x-2 mt-4 justify-start">
+                      <Label htmlFor="ispfi_izvestaj">ISPFI izveštaj</Label>
+                      <Switch
+                        id="ispfi_izvestaj"
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                        }}
+                      />
+                    </div>
+                  )}
+                />
+
+
+        { getValues('ispfi_izvestaj') && 
+        (<Input
+            type="text"
+            placeholder={'PI-123456-89'}
+            label="Naziv ISPFI izvestaja"
+            registration={register('IspfiFileName')}
+            error={errors?.IspfiFileName}
+            // onChange={(e) => console.log(e.target.value)}
+            // registration={registration}
+            // onFocus={handleInputFocus}
+            // onBlur={handleInputFocus}
+            />
+            )}
+            
             <div className="flex gap-x-4 justify-end">
                 <Button variant="outline" onClick={closeCreteTable}>Close</Button>
                 <Button type="submit" disabled={!isDirty || isProcessing}>

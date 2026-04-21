@@ -25,6 +25,19 @@ export const excelFileFileSchema = z.object({
                 message: "Invalid file type. Only .xlsx files are allowed.",
             }
         ),
+    ispfi_izvestaj: z.boolean(),
+    IspfiFileName: z
+    .string()
+    .trim()
+    .optional(),
+}).refine((data) => {
+    if (data.ispfi_izvestaj && (!data.IspfiFileName || data.IspfiFileName.trim() === '')) {
+        return false;
+    }
+    return true;
+}, {
+    message: 'Ime fajla je obavezno kada je ISPFI izveštaj uključen',
+    path: ['IspfiFileName'],
 });
 
 export type ExceFileFormSchema = z.infer<typeof excelFileFileSchema>;
