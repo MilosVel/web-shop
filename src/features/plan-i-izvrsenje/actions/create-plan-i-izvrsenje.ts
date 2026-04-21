@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/auth/nextjs/currentUser"
 
 import { canInsertPlanIIzvrsenje } from "@/features/plan-i-izvrsenje/permissions";
 import { planItem, izvrsenjeItem, izvorItem } from "@/features/plan-i-izvrsenje/schemas";
+import { AOP_ARRAY } from "@/features/plan-i-izvrsenje/constants";
 
 
 import type { IzvrsenjeGrouped, PlanGrouped, GroupAndMergeResult, MergedRow } from "@/features/plan-i-izvrsenje/dto";
@@ -69,13 +70,33 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
             }
         });
 
+        // 0
+// This is example of izvoriData
+// const izvoriData = [{izvor: '01', ispfi_kolona: '8'},
+// {izvor: '07', ispfi_kolona: '6'},
+// {izvor: '17', ispfi_kolona: '06'}];
+
         // ── collect all unique izvor values sorted ──
         const allIzvori = izvoriData.map(item => item.izvor).sort();
+        const IspfiColumns= izvoriData.map(item => item.ispfi_kolona).sort();
 
         // ── Full outer join ──
-        const allKeys = new Set([...izvrsenjeMap.keys(), ...planMap.keys()]);
+        const allKonta = new Set([...izvrsenjeMap.keys(), ...planMap.keys()]);
 
-        const planIIzvrsenje = Array.from(allKeys).map((key) => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+        const planIIzvrsenje = Array.from(allKonta).map((key) => {
             const izvrsenjeRow = izvrsenjeMap.get(key);
             const planRow = planMap.get(key);
 
