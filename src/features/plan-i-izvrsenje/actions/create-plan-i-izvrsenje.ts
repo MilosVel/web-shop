@@ -105,12 +105,18 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
         const planIIzvrsenje = Array.from(allKonta).map((key) => {
             // Here you can easily map aop and konto
 
-            const kontoNa6Nivou = key+'00'
-            const aop = AOP_ARRAY.find(item => {
-                return item.konto === +kontoNa6Nivou
+            const filteredAops = AOP_ARRAY.filter(item => {
+                return item.konto === +key
             })
+
+            const aop = filteredAops.find(item => {
+                return item.konto === +key
+            })    
                 
-            console.log('aop:', aop);
+      console.log(key,'konot',aop)
+
+
+
             const izvrsenjeRow = izvrsenjeMap.get(key);
             const planRow = planMap.get(key);
 
