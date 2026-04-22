@@ -34,6 +34,6 @@
 
 
     export interface GroupAndMergeResult {
-        planIIzvrsenje: MergedRow[];
+        izvrsenjeBuzetaPoKontima: MergedRow[];
         header: string[];
     };

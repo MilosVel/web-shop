@@ -132,13 +132,13 @@ export function IzvrsenjeBudzetaForm({
 
 
             const {
-                planIIzvrsenje,
+                izvrsenjeBuzetaPoKontima,
                 header
             } = await createIzvrsenjeBudzeta(izvrsenjeData, planData, ibkArray, IzvoriItems)
 
             // Call the callback to pass data to parent component
             if (onDataProcessed) {
-                onDataProcessed({planIIzvrsenje, header});
+                onDataProcessed({izvrsenjeBuzetaPoKontima, header});
             }
 
     

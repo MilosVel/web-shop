@@ -101,7 +101,7 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
         const allKonta = new Set([...izvrsenjeMap.keys(), ...planMap.keys()]);
 
 
-        const planIIzvrsenje = Array.from(allKonta).map((key) => {
+        const izvrsenjeBuzetaPoKontima = Array.from(allKonta).map((key) => {
 
 
             const izvrsenjeRow = izvrsenjeMap.get(key);
@@ -157,16 +157,16 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
 
         const header = ['konto', 'plan', ...allIzvori, 'ukupno'];
 
-        return { planIIzvrsenje, header };
+        return { izvrsenjeBuzetaPoKontima, header };
     }
 
-    const { planIIzvrsenje, header } = groupAndMerge(izvrsenjeData, planData);
+    const { izvrsenjeBuzetaPoKontima, header } = groupAndMerge(izvrsenjeData, planData);
 
     console.log('izvrsenjeBuzeta', jsonIzvrsenjeBuzetaArray);
 
 
     return {
-        planIIzvrsenje,
+        izvrsenjeBuzetaPoKontima,
         header
     }
 

@@ -11,7 +11,7 @@ import { useState } from "react";
 import type { GroupAndMergeResult } from "@/features/izvrsenje-budzeta/dto";
 
 export default function IzvrsenjeBudzetaPage() {
-    const [izvrsenjeBudzeta, setIzvrsenjeBudzeta] = useState<GroupAndMergeResult | null>(null);
+    const [izvrsenjeBuzetaPoKontima, setIzvrsenjeBudzeta] = useState<GroupAndMergeResult | null>(null);
 
     const handleDataProcessed = (data:GroupAndMergeResult) => {
         setIzvrsenjeBudzeta(data);
@@ -29,10 +29,10 @@ export default function IzvrsenjeBudzetaPage() {
                         }
                         onDataProcessed={handleDataProcessed}
                     />
-                    {izvrsenjeBudzeta && izvrsenjeBudzeta.planIIzvrsenje.length > 0 && (
+                    {izvrsenjeBuzetaPoKontima && izvrsenjeBuzetaPoKontima.izvrsenjeBuzetaPoKontima.length > 0 && (
                         <ExportExcel 
-                            data={izvrsenjeBudzeta.planIIzvrsenje} 
-                            header={izvrsenjeBudzeta.header} 
+                            data={izvrsenjeBuzetaPoKontima.izvrsenjeBuzetaPoKontima} 
+                            header={izvrsenjeBuzetaPoKontima.header} 
                             fileName={'Plan i Izvrsenje izvestaj.xlsx'} 
                         />
                     )}
