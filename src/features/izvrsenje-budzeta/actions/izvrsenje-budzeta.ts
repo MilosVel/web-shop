@@ -14,15 +14,19 @@ const RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP=5
 
 export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], planData: planItem[], ibkSet: Set<string>, izvoriData: izvorItem[]) {
 
-
-    const jsonIzvrsenjeBuzetaForISPFI: Record<string, number[]> = {}
-
     const user = await getCurrentUser({ redirectIfNotFound: true })  // nece da radi bez ->   { redirectIfNotFound: true }   Proveriti zasto !!!!
 
     if (!canInsertPlanIIzvrsenje(user) && false) { // !!!!
         // if (!canInsertPlanIIzvrsenje(user)) { // !!!!
         throw new Error(`Inserting table error. (Zbog permisja user mora biti admin a trenutni user je: ${user.role})`);
     }
+
+    
+    
+    
+    const jsonIzvrsenjeBuzetaForISPFI: Record<string, number[]> = {}
+
+
 
 
     function groupAndMergePlanIIzvrsenje(
@@ -111,6 +115,7 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
 
 
 
+
         const izvrsenjeBuzetaPoKontima = Array.from(allKonta).map((konto) => {
 
 
@@ -123,10 +128,6 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
                     getIzvrsenjeValue(izvrsenjeRow, izvor),
                 ])
             );
-
-
-    
-
 
 
 
