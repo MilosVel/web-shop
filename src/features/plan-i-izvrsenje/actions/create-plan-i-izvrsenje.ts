@@ -13,6 +13,8 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
 
     const izvrsenjeBuzeta: any[] = []
 
+    const jsonIzvrsenjeBuzetaArray: any[] = []
+
     const user = await getCurrentUser({ redirectIfNotFound: true })  // nece da radi bez ->   { redirectIfNotFound: true }   Proveriti zasto !!!!
 
     if (!canInsertPlanIIzvrsenje(user) && false) { // !!!!
@@ -164,6 +166,24 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
 
 
             izvrsenjeBuzeta.push(izvrsenjeBudzeta)
+
+            const {plan,konto, ukupno, ...rest} = izvrsenjeBudzeta
+            const aopValue = AOP_ARRAY.find(item => item.konto === +izvrsenjeBudzeta.konto)?.aop;
+            
+
+           const aopItemforJSON = aopValue ? [aopValue] : [0,0,0,0,0,0,0]
+
+aopItemforJSON[0]= plan
+aopItemforJSON[aopItemforJSON.length - 1] = ukupno
+ 
+for (const [key, value] of Object.entries(rest)){
+    aopItemforJSON[parseInt(key)-5]= value as number
+}
+           
+// console.log('aopItemforJSON', aopItemforJSON);
+
+           
+            jsonIzvrsenjeBuzetaArray.push(aopItemforJSON)
             ////////////////////////////////////
 
 
@@ -188,7 +208,8 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
 
     const { planIIzvrsenje, header } = groupAndMerge(izvrsenjeData, planData);
 
-    console.log('izvrsenjeBuzeta', izvrsenjeBuzeta.sort((a, b) => a.konto.localeCompare(b.konto)));
+    // console.log('izvrsenjeBuzeta', izvrsenjeBuzeta.sort((a, b) => a.konto.localeCompare(b.konto)));
+    console.log('izvrsenjeBuzeta', jsonIzvrsenjeBuzetaArray);
 
 
     return {
