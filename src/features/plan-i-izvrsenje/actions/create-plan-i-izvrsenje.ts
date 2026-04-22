@@ -25,6 +25,26 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
         planData: planItem[],
     ): GroupAndMergeResult {
 
+        // Helper function to safely get numeric value from izvrsenje row
+        const getIzvrsenjeValue = (izvrsenjeRow: IzvrsenjeGrouped | undefined, izvor: string): number => {
+            return izvrsenjeRow ? Number(izvrsenjeRow[izvor] ?? 0) : 0;
+        };
+
+        // Helper function to merge aop columns, summing values for duplicate keys
+        const mergeAopColumns = (izvrsenjeRow: IzvrsenjeGrouped | undefined, izvoriData: izvorItem[]): Record<string, number> => {
+            const result: Record<string, number> = {};
+            
+            izvoriData.forEach(aop => {
+                const value = getIzvrsenjeValue(izvrsenjeRow, aop.izvor);
+                const column = aop.ispfi_kolona;
+                
+                // Sum values for duplicate columns
+                result[column] = (result[column] || 0) + value;
+            });
+            
+            return result;
+        };
+
         // ── Group izvrsenje by first 4 digits of konto ──
         const izvrsenjeMap = new Map<string, IzvrsenjeGrouped>();
 
@@ -113,7 +133,7 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
                 return item.konto === +key
             })    
                 
-      console.log(key,'konot',aop)
+    //   console.log(key,'konot',aop)
 
 
 
@@ -123,18 +143,17 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
             const izvorColumns = Object.fromEntries(
                 allIzvori.map(izvor => [
                     izvor,
-                    izvrsenjeRow ? Number(izvrsenjeRow[izvor] ?? 0) : 0,
+                    getIzvrsenjeValue(izvrsenjeRow, izvor),
                 ])
             );
 
         ////////////////////////////////////
 
-        const aopColumns = Object.fromEntries(
-            izvoriData.map(aop => [
-                aop.ispfi_kolona,
-                izvrsenjeRow ? Number(izvrsenjeRow[aop.izvor] ?? 0) : 0
-            ])
-        )
+        const aopColumns = mergeAopColumns(izvrsenjeRow, izvoriData);
+
+        // This is relatively good but nwo we can have case:
+        // aopColumns= onst aopColumns = Object.fromEntries([['aop1', 100], ['aop2', 200], ['aop1', 300]])
+        // And I want to merge them so that aop1 has value 400
 
         const izvrsenjeBudzeta =   {
                         konto: key,
@@ -144,7 +163,7 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
                     } 
                 
 
-
+        console.log('izvrsenjeBudzeta', izvrsenjeBudzeta)
         ////////////////////////////////////
 
 
