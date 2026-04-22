@@ -111,11 +111,11 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
 
 
 
-        const izvrsenjeBuzetaPoKontima = Array.from(allKonta).map((key) => {
+        const izvrsenjeBuzetaPoKontima = Array.from(allKonta).map((konto) => {
 
 
-            const izvrsenjeRow = izvrsenjeMap.get(key);
-            const planRow = planMap.get(key);
+            const izvrsenjeRow = izvrsenjeMap.get(konto);
+            const planRow = planMap.get(konto);
 
             const izvoriIzvrsenjeColumns = Object.fromEntries(
                 allIzvori.map(izvor => [
@@ -135,16 +135,16 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
 
             const aopColumns = getAopColumns(izvrsenjeRow, izvoriData);
 
-            const aopValue = AOP_ARRAY.find(item => item.konto === +key)?.aop;
+            const aopValue = AOP_ARRAY.find(item => item.konto === +konto)?.aop;
 
             if (aopValue) {
                 // Create array with fixed structure: [plan, 0, 0, 0, 0, 0, ukupno]
                 const aopItemForISPFIIzvrsenjeBudzeta = [plan, 0, 0, 0, 0, 0, ukupno];
                 
                 // Map rest keys to indices (1-5) and set values
-                Object.entries(aopColumns).forEach(([key, value]) => {
+                Object.entries(aopColumns).forEach(([brojISPFIkolone, value]) => {
 
-                    const index = parseInt(key) - RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP;
+                    const index = parseInt(brojISPFIkolone) - RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP;
 
                     if (index >= 1 && index <= RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP) {
                         aopItemForISPFIIzvrsenjeBudzeta[index] = value;
@@ -162,7 +162,7 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
             
 
             return {
-                konto: key,
+                konto: konto,
                 plan: planRow?.plan ?? 0,
                 ...izvoriIzvrsenjeColumns,
                 ukupno: izvrsenjeRow?.ukupno ?? 0,
