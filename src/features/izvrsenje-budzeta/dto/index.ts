@@ -33,7 +33,10 @@
     // };
 
 
+    export type izvrsenjeBudzetaZaISPFIType = Record<string, number[]>
+
     export interface IzvrsenjeBudzetaResult {
         izvrsenjeBuzetaPoKontima: IzvrsenjeBuzetaPoKontimaItem[];
         excelHeader: string[];
+        izvrsenjeBudzetaZaISPFI: izvrsenjeBudzetaZaISPFIType;
     };

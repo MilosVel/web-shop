@@ -3,11 +3,11 @@
 import { getCurrentUser } from "@/auth/nextjs/currentUser"
 
 import { canInsertPlanIIzvrsenje } from "@/features/izvrsenje-budzeta/permissions";
-import { planItem, izvrsenjeItem, izvorItem } from "@/features/izvrsenje-budzeta/schemas";
+import { planItem, izvrsenjeItem, izvorItem,  } from "@/features/izvrsenje-budzeta/schemas";
 import { AOP_ARRAY } from "@/features/izvrsenje-budzeta/constants";
 
 
-import type { IzvrsenjeItem, PlanGrouped, IzvrsenjeBudzetaResult, IzvrsenjeBuzetaPoKontimaItem } from "@/features/izvrsenje-budzeta/dto";
+import type { IzvrsenjeItem, PlanGrouped, IzvrsenjeBudzetaResult, IzvrsenjeBuzetaPoKontimaItem, izvrsenjeBudzetaZaISPFIType } from "@/features/izvrsenje-budzeta/dto";
 
 
 const RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP=5
@@ -24,7 +24,6 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
     
     
     
-    const jsonIzvrsenjeBuzetaForISPFI: Record<string, number[]> = {}
 
 
 
@@ -115,12 +114,16 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
 
 
 
+        const izvrsenjeBudzetaPoKontimaArray: IzvrsenjeBuzetaPoKontimaItem[] = []
 
-        const izvrsenjeBuzetaPoKontima = Array.from(allKonta).map((konto) => {
+        const izvrsenjeBudzetaZaISPFI: izvrsenjeBudzetaZaISPFIType = {}
+
+        Array.from(allKonta).forEach((konto) => {
 
 
+            const plan = planMap.get(konto)?.plan ?? 0
             const izvrsenjeRow = izvrsenjeMap.get(konto);
-            const planRow = planMap.get(konto);
+            const ukupnoIzvrsenje= izvrsenjeRow?.ukupno ?? 0
 
             const izvoriIzvrsenjeColumns = Object.fromEntries(
                 allIzvori.map(izvor => [
@@ -129,18 +132,26 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
                 ])
             );
 
+              const izvrsenjreBudzetaPoKontimaItem= {
+                konto,
+                plan,
+                ...izvoriIzvrsenjeColumns,
+                ukupno: ukupnoIzvrsenje,
+            } as IzvrsenjeBuzetaPoKontimaItem;
+            
+            izvrsenjeBudzetaPoKontimaArray.push(izvrsenjreBudzetaPoKontimaItem);
 
 
-            const plan =  planRow?.plan ?? 0
-            const ukupno = izvrsenjeRow?.ukupno ?? 0
+
+           
 
             const aopColumns = getAopColumns(izvrsenjeRow, izvoriData);
 
-            const aopValue = AOP_ARRAY.find(item => item.konto === +konto)?.aop;
+            const aopKey = AOP_ARRAY.find(item => item.konto === +konto)?.aop;
 
-            if (aopValue) {
-                // Create array with fixed structure: [plan, 0, 0, 0, 0, 0, ukupno]
-                const aopItemForISPFIIzvrsenjeBudzeta = [plan, 0, 0, 0, 0, 0, ukupno];
+            if (aopKey) {
+                // Create array with fixed structure: [plan, 0, 0, 0, 0, 0, ukupnoIzvrsenje]
+                const aopItemForISPFIIzvrsenjeBudzeta = [plan, 0, 0, 0, 0, 0, ukupnoIzvrsenje];
                 
                 // Map rest keys to indices (1-5) and set values
                 Object.entries(aopColumns).forEach(([brojISPFIkolone, value]) => {
@@ -156,33 +167,33 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
                 });
                 
                 // Add to the result object with AOP as key
-                jsonIzvrsenjeBuzetaForISPFI[aopValue.toString()] = aopItemForISPFIIzvrsenjeBudzeta;
+                izvrsenjeBudzetaZaISPFI[aopKey.toString()] = aopItemForISPFIIzvrsenjeBudzeta;
             }
-            
 
-            
+        });
 
-            return {
-                konto: konto,
-                plan: planRow?.plan ?? 0,
-                ...izvoriIzvrsenjeColumns,
-                ukupno: izvrsenjeRow?.ukupno ?? 0,
-            } as IzvrsenjeBuzetaPoKontimaItem;
-        }).sort((a, b) => a.konto.localeCompare(b.konto));
+
+
 
         const excelHeader = ['konto', 'plan', ...allIzvori, 'ukupno'];
 
-        return { izvrsenjeBuzetaPoKontima, excelHeader };
+        return { 
+            izvrsenjeBuzetaPoKontima: izvrsenjeBudzetaPoKontimaArray.sort((a, b) => a.konto.localeCompare(b.konto)), 
+            excelHeader,
+            izvrsenjeBudzetaZaISPFI
+            
+        };
     }
 
-    const { izvrsenjeBuzetaPoKontima, excelHeader } = groupAndMergePlanIIzvrsenje(izvrsenjeData, planData);
-
-    console.log('izvrsenjeBuzeta', jsonIzvrsenjeBuzetaForISPFI);
+    const { izvrsenjeBuzetaPoKontima, excelHeader, izvrsenjeBudzetaZaISPFI } = groupAndMergePlanIIzvrsenje(izvrsenjeData, planData);
 
 
+
+    console.log(izvrsenjeBudzetaZaISPFI)
     return {
         izvrsenjeBuzetaPoKontima,
-        excelHeader
+        excelHeader,
+        izvrsenjeBudzetaZaISPFI
     }
 
 }
