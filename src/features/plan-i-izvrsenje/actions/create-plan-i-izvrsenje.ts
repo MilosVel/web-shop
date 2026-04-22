@@ -13,7 +13,7 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
 
     const izvrsenjeBuzeta: any[] = []
 
-    const jsonIzvrsenjeBuzetaArray: any[] = []
+    const jsonIzvrsenjeBuzetaArray: Record<string, number[]> = {}
 
     const user = await getCurrentUser({ redirectIfNotFound: true })  // nece da radi bez ->   { redirectIfNotFound: true }   Proveriti zasto !!!!
 
@@ -93,50 +93,15 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
             }
         });
 
-        // 0
-        // This is example of izvoriData
-        // const izvoriData = [{izvor: '01', ispfi_kolona: '8'},
-        // {izvor: '07', ispfi_kolona: '6'},
-        // {izvor: '17', ispfi_kolona: '06'}];
 
         // ── collect all unique izvor values sorted ──
         const allIzvori = izvoriData.map(item => item.izvor).sort();
-        const IspfiColumns = izvoriData.map(item => item.ispfi_kolona).sort();
 
         // ── Full outer join ──
         const allKonta = new Set([...izvrsenjeMap.keys(), ...planMap.keys()]);
 
 
-        // const izvrsenjeBuzeta = 
-        // Can you help me to create izvrsenjeBuzeta. Every konto ojb  in allKonta array has its aop in AOP_ARRAY. And I want to have this kind of structure
-        // {IzvrsenjeBuzdetaExcel: [{konto: some valeue, plan: some value, ....allIzvori and valies for respective izvor, ukupno:somevalue that reresetns summ of allIzvori values}]
-        // ispfiIzvrsenjeBuzeta: {
-        //     aop1: [plan: some value for this aop, ....IspfiColumns and valies for respective column, ukupno:somevalue that reresetns summ of all IspfiColumns values fro this aop],
-        //     ...
-        // }
-        // }
-        // and to cosnole.log(izvrsenjeBuzeta)
-
-
-
-
-
-
-
-
         const planIIzvrsenje = Array.from(allKonta).map((key) => {
-            // Here you can easily map aop and konto
-
-            const filteredAops = AOP_ARRAY.filter(item => {
-                return item.konto === +key
-            })
-
-            const aop = filteredAops.find(item => {
-                return item.konto === +key
-            })
-
-            //   console.log(key,'konot',aop)
-
 
 
             const izvrsenjeRow = izvrsenjeMap.get(key);
@@ -153,10 +118,6 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
 
             const aopColumns = mergeAopColumns(izvrsenjeRow, izvoriData);
 
-            // This is relatively good but nwo we can have case:
-            // aopColumns= onst aopColumns = Object.fromEntries([['aop1', 100], ['aop2', 200], ['aop1', 300]])
-            // And I want to merge them so that aop1 has value 400
-
             const izvrsenjeBudzeta = {
                 konto: key,
                 plan: planRow?.plan ?? 0,
@@ -167,31 +128,24 @@ export async function createPlanIIzvrsenje(izvrsenjeData: izvrsenjeItem[], planD
 
             izvrsenjeBuzeta.push(izvrsenjeBudzeta)
 
-            const {plan,konto, ukupno, ...rest} = izvrsenjeBudzeta
+            const {plan, konto, ukupno, ...rest} = izvrsenjeBudzeta
             const aopValue = AOP_ARRAY.find(item => item.konto === +izvrsenjeBudzeta.konto)?.aop;
+            if (aopValue) {
+                // Create array with fixed structure: [plan, 0, 0, 0, 0, 0, ukupno]
+                const aopItemforJSON = [plan, 0, 0, 0, 0, 0, ukupno];
+                
+                // Map rest keys to indices (1-5) and set values
+                Object.entries(rest as Record<string, number>).forEach(([key, value]) => {
+                    const index = parseInt(key);
+                    if (index >= 1 && index <= 5) {
+                        aopItemforJSON[index] = value;
+                    }
+                });
+                
+                // Add to the result object with AOP as key
+                jsonIzvrsenjeBuzetaArray[aopValue.toString()] = aopItemforJSON;
+            }
             
-
-           const aopItemforJSON = aopValue ? [aopValue] : [0,0,0,0,0,0,0]
-
-aopItemforJSON[0]= plan
-aopItemforJSON[aopItemforJSON.length - 1] = ukupno
- 
-for (const [key, value] of Object.entries(rest)){
-    aopItemforJSON[parseInt(key)-5]= value as number
-}
-           
-// console.log('aopItemforJSON', aopItemforJSON);
-
-           
-            jsonIzvrsenjeBuzetaArray.push(aopItemforJSON)
-            ////////////////////////////////////
-
-
-
-
-
-
-
 
             return {
                 konto: key,
@@ -208,7 +162,6 @@ for (const [key, value] of Object.entries(rest)){
 
     const { planIIzvrsenje, header } = groupAndMerge(izvrsenjeData, planData);
 
-    // console.log('izvrsenjeBuzeta', izvrsenjeBuzeta.sort((a, b) => a.konto.localeCompare(b.konto)));
     console.log('izvrsenjeBuzeta', jsonIzvrsenjeBuzetaArray);
 
 
