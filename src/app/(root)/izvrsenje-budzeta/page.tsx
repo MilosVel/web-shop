@@ -13,6 +13,7 @@ import type {
   IspfiIzvestajData,
 } from "@/features/izvrsenje-budzeta/dto";
 
+
 export default function IzvrsenjeBudzetaPage() {
   const [izvrsenjeBuzetaResult, setIzvrsenjeBudzeta] = useState<
     (IzvrsenjeBudzetaResult & IspfiIzvestajData) | null
@@ -27,7 +28,18 @@ export default function IzvrsenjeBudzetaPage() {
 
   return (
     <ContentLayout routeTitle="Plan i izvrsenje">
-      <div className="flex flex-row justify-around ju gap-4">
+      <div className="flex flex-row justify-start gap-24">
+        <div className="gap-x-3 border-2 rounded border-gray-100">
+        
+           <a
+          className="group bg-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 transition cursor-pointer borderBlack dark:bg-white/10"
+          href='/Uputstvo.xlsx'
+          download
+        >
+          Preuzmi Uptstvo{" "}
+          <FileSpreadsheet className="opacity-60 group-hover:translate-y-1 transition" />
+        </a>
+ </div>
         <div className="flex flex-rpw gap-x-3">
           <DialogUploadIzvrsenjeBuzeta
             triggerButton={
