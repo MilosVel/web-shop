@@ -187,9 +187,6 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
 
     const { izvrsenjeBuzetaPoKontima, excelHeader, izvrsenjeBudzetaZaISPFI } = groupAndMergePlanIIzvrsenje(izvrsenjeData, planData);
 
-
-
-    console.log(izvrsenjeBudzetaZaISPFI)
     return {
         izvrsenjeBuzetaPoKontima,
         excelHeader,

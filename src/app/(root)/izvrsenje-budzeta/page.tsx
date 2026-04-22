@@ -15,8 +15,12 @@ export default function IzvrsenjeBudzetaPage() {
 
     const handleDataProcessed = (data:IzvrsenjeBudzetaResult) => {
         setIzvrsenjeBudzeta(data);
-      
     }
+
+    console.log(izvrsenjeBuzetaResult?.izvrsenjeBudzetaZaISPFI)
+
+
+
     return (
         <ContentLayout routeTitle="Plan i izvrsenje">
             <div className="flex flex-row justify-around ju gap-4">
