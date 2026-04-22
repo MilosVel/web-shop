@@ -9,6 +9,9 @@ import { AOP_ARRAY } from "@/features/izvrsenje-budzeta/constants";
 
 import type { IzvrsenjeItem, PlanGrouped, IzvrsenjeBudzetaResult, IzvrsenjeBuzetaPoKontimaItem } from "@/features/izvrsenje-budzeta/dto";
 
+
+const RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP=5
+
 export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], planData: planItem[], ibkSet: Set<string>, izvoriData: izvorItem[]) {
 
 
@@ -36,9 +39,9 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
         const getAopColumns = (izvrsenjeRow: IzvrsenjeItem | undefined, izvoriData: izvorItem[]): Record<string, number> => {
             const result: Record<string, number> = {};
 
-            izvoriData.forEach(aop => {
-                const value = getIzvrsenjeValue(izvrsenjeRow, aop.izvor);
-                const column = aop.ispfi_kolona;
+            izvoriData.forEach(izvorItem => {
+                const value = getIzvrsenjeValue(izvrsenjeRow, izvorItem.izvor);
+                const column = izvorItem.ispfi_kolona;
 
                 // Sum values for duplicate columns
                 result[column] = (result[column] || 0) + value;
@@ -140,10 +143,15 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
                 
                 // Map rest keys to indices (1-5) and set values
                 Object.entries(aopColumns).forEach(([key, value]) => {
-                    const index = parseInt(key) - 5;
-                    if (index >= 1 && index <= 5) {
+
+                    const index = parseInt(key) - RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP;
+
+                    if (index >= 1 && index <= RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP) {
                         aopItemForISPFIIzvrsenjeBudzeta[index] = value;
+                    }else{
+                        console.log('Greska: Index van opsega', index);
                     }
+
                 });
                 
                 // Add to the result object with AOP as key
