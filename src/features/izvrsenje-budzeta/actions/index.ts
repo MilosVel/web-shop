@@ -1,1 +1,1 @@
-export { createIzvrsenjeBudzeta } from './create-plan-i-izvrsenje'
+export { createIzvrsenjeBudzeta } from './izvrsenje-budzeta'

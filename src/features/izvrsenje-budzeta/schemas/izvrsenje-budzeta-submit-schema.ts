@@ -3,7 +3,7 @@ import { excelFileFileSchema } from "@/utils/manage-file/excel-file-schema";
 
 
 
-export const izvrsenjeBudzetaExcelSchema = excelFileFileSchema.safeExtend({
+export const izvrsenjeBudzetaSumbitSchema = excelFileFileSchema.safeExtend({
     ispfi_izvestaj: z.boolean(),
     IspfiFileName: z
     .string()
@@ -19,4 +19,4 @@ export const izvrsenjeBudzetaExcelSchema = excelFileFileSchema.safeExtend({
     path: ['IspfiFileName'],
 });
 
-export type FormIzvrsenjeBudzetaExcelSchema = z.infer<typeof izvrsenjeBudzetaExcelSchema>;
+export type FormIzvrsenjeBudzetaSubmitSchema = z.infer<typeof izvrsenjeBudzetaSumbitSchema>;

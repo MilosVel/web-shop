@@ -5,7 +5,7 @@ import { UploadInput } from "@/components/ui/form/upload-input";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { excelFileFileSchema, ExceFileFormSchema } from "@/utils/manage-file/excel-file-schema";
-import { FormIzvrsenjeBudzetaExcelSchema, izvrsenjeBudzetaExcelSchema } from "@/features/izvrsenje-budzeta/schemas";
+import { FormIzvrsenjeBudzetaSubmitSchema, izvrsenjeBudzetaSumbitSchema} from "@/features/izvrsenje-budzeta/schemas";
 import { readSchemaParsedExcelFile, readMultipleExcelSheets } from "@/utils/manage-file/read-schema-parsed-excel-file";
 import { planSchema, planItem, izvrsenjeSchema, izvrsenjeHeaderMap, izvrsenjeItem, ibkItem, IbkSchema, izvorItem, IzvoriSchema } from "@/features/izvrsenje-budzeta/schemas";
 import { createIzvrsenjeBudzeta } from "@/features/izvrsenje-budzeta/actions";
@@ -37,13 +37,13 @@ export function IzvrsenjeBudzetaForm({
         getValues,
         clearErrors,
         watch
-    } = useForm<FormIzvrsenjeBudzetaExcelSchema>({
+    } = useForm<FormIzvrsenjeBudzetaSubmitSchema>({
         defaultValues: {
             file: undefined,
             IspfiFileName: '',
             ispfi_izvestaj: false,
         },
-        resolver: zodResolver(izvrsenjeBudzetaExcelSchema),
+        resolver: zodResolver(izvrsenjeBudzetaSumbitSchema),
     });
 
     const ispfiIzvestajValue = watch('ispfi_izvestaj');
