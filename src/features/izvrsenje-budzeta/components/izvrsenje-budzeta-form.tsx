@@ -54,7 +54,7 @@ export function IzvrsenjeBudzetaForm({
         }
     }, [ispfiIzvestajValue, clearErrors]);
 
-    const handleFormSubmit = async (formValues: ExceFileFormSchema) => {
+    const handleFormSubmit = async (formValues: FormIzvrsenjeBudzetaSubmitSchema) => {
         try {
             setIsProcessing(true);
 
