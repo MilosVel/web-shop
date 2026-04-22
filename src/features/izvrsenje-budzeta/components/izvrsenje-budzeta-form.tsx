@@ -21,29 +21,13 @@ import type { IzvrsenjeBudzetaResult, IspfiIzvestajData } from "@/features/izvrs
 
 
 
-
-export const REPORT_PERIOD_TYPE_OPTIONS: SelectOption[] = [
-    {
-        value: '1',
-        label: '1',
-
-    },
-    {
-        value: '2',
-        label: '2',
-
-    },
-    {
-        value: '3',
-        label: '3',
-
-    },
-    {
-        value: '4',
-        label: '4',
-    },
-];
-
+export const REPORT_PERIOD_TYPE_OPTIONS: SelectOption[] = Array.from(
+    { length: 1000 },
+    (_, i) => ({
+        value: String(i + 1),
+        label: String(i + 1),
+    })
+);
 
 export function IzvrsenjeBudzetaForm({
     closeCreteTable,
