@@ -7,7 +7,7 @@ import { planItem, izvrsenjeItem, izvorItem } from "@/features/izvrsenje-budzeta
 import { AOP_ARRAY } from "@/features/izvrsenje-budzeta/constants";
 
 
-import type { IzvrsenjeGrouped, PlanGrouped, GroupAndMergeResult, MergedRow } from "@/features/izvrsenje-budzeta/dto";
+import type { IzvrsenjeItem, PlanGrouped, IzvrsenjeBudzetaResult, IzvrsenjeBuzetaPoKontimaItem } from "@/features/izvrsenje-budzeta/dto";
 
 export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], planData: planItem[], ibkSet: Set<string>, izvoriData: izvorItem[]) {
 
@@ -26,15 +26,15 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
     function groupAndMerge(
         izvrsenjeData: izvrsenjeItem[],
         planData: planItem[],
-    ): GroupAndMergeResult {
+    ): IzvrsenjeBudzetaResult {
 
         // Helper function to safely get numeric value from izvrsenje row
-        const getIzvrsenjeValue = (izvrsenjeRow: IzvrsenjeGrouped | undefined, izvor: string): number => {
+        const getIzvrsenjeValue = (izvrsenjeRow: IzvrsenjeItem | undefined, izvor: string): number => {
             return izvrsenjeRow ? Number(izvrsenjeRow[izvor] ?? 0) : 0;
         };
 
         // Helper function to merge aop columns, summing values for duplicate keys
-        const mergeAopColumns = (izvrsenjeRow: IzvrsenjeGrouped | undefined, izvoriData: izvorItem[]): Record<string, number> => {
+        const getAopColumns = (izvrsenjeRow: IzvrsenjeItem | undefined, izvoriData: izvorItem[]): Record<string, number> => {
             const result: Record<string, number> = {};
 
             izvoriData.forEach(aop => {
@@ -48,8 +48,14 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
             return result;
         };
 
-        // ── Group izvrsenje by first 4 digits of konto ──
-        const izvrsenjeMap = new Map<string, IzvrsenjeGrouped>();
+
+
+
+
+
+
+        // ── izvrsenjeMap ──
+        const izvrsenjeMap = new Map<string, IzvrsenjeItem>();
 
 
         izvrsenjeData.forEach((item) => {
@@ -74,11 +80,11 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
                     konto: key,
                     ukupno: duguje,
                     [item.izvor]: duguje,
-                } as IzvrsenjeGrouped);
+                } as IzvrsenjeItem);
             }
         });
 
-        // ── Group plan by first 4 digits of konto ──
+        // ── planMap ──
         const planMap = new Map<string, PlanGrouped>();
 
         planData.forEach((item) => {
@@ -93,12 +99,14 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
             }
         });
 
+        // ── allKonta from Plamn i Izvrsenje ──
+        const allKonta = new Set([...izvrsenjeMap.keys(), ...planMap.keys()]);
 
-        // ── collect all unique izvor values sorted ──
+        
+
         const allIzvori = izvoriData.map(item => item.izvor).sort();
 
-        // ── Full outer join ──
-        const allKonta = new Set([...izvrsenjeMap.keys(), ...planMap.keys()]);
+
 
 
         const izvrsenjeBuzetaPoKontima = Array.from(allKonta).map((key) => {
@@ -107,16 +115,15 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
             const izvrsenjeRow = izvrsenjeMap.get(key);
             const planRow = planMap.get(key);
 
-            const izvorColumns = Object.fromEntries(
+            const izvoriIzvrsenjeColumns = Object.fromEntries(
                 allIzvori.map(izvor => [
                     izvor,
                     getIzvrsenjeValue(izvrsenjeRow, izvor),
                 ])
             );
 
-            ////////////////////////////////////
 
-            const aopColumns = mergeAopColumns(izvrsenjeRow, izvoriData);
+            const aopColumns = getAopColumns(izvrsenjeRow, izvoriData);
 
             const izvrsenjeBudzeta = {
                 konto: key,
@@ -150,9 +157,9 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
             return {
                 konto: key,
                 plan: planRow?.plan ?? 0,
-                ...izvorColumns,
+                ...izvoriIzvrsenjeColumns,
                 ukupno: izvrsenjeRow?.ukupno ?? 0,
-            } as MergedRow;
+            } as IzvrsenjeBuzetaPoKontimaItem;
         }).sort((a, b) => a.konto.localeCompare(b.konto));
 
         const header = ['konto', 'plan', ...allIzvori, 'ukupno'];

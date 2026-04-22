@@ -1,11 +1,11 @@
 
-   export type IzvrsenjeGrouped = {
+   export type IzvrsenjeItem = {
         jbkjs: string
         konto: string;
         ukupno: number
     } & Record<string, number>
 
-    // export interface IzvrsenjeGrouped  {
+    // export interface IzvrsenjeItem  {
     //     jbkjs: string
     //     konto: string;
     //     ukupno: number;
@@ -19,13 +19,13 @@
 
 
 
-   export type MergedRow = {
+   export type IzvrsenjeBuzetaPoKontimaItem = {
         konto: string;
         ukupno: number;
         plan: number;
     } & Record<string, number>;
 
-    // export interface MergedRow {
+    // export interface IzvrsenjeBuzetaPoKontimaItem {
     //     konto: string;
     //     ukupno: number;
     //     plan: number;
@@ -33,7 +33,7 @@
     // };
 
 
-    export interface GroupAndMergeResult {
-        izvrsenjeBuzetaPoKontima: MergedRow[];
+    export interface IzvrsenjeBudzetaResult {
+        izvrsenjeBuzetaPoKontima: IzvrsenjeBuzetaPoKontimaItem[];
         header: string[];
     };

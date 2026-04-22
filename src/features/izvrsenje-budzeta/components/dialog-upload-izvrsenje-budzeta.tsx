@@ -4,11 +4,11 @@ import { CommonDialog } from '@/components/ui/dialog/common-dialog';
 import { useDisclosure } from '@/hooks';
 import { IzvrsenjeBudzetaForm } from '@/features/izvrsenje-budzeta/components/izvrsenje-budzeta-form';
 
-import type { GroupAndMergeResult } from "@/features/izvrsenje-budzeta/dto";
+import type { IzvrsenjeBudzetaResult } from "@/features/izvrsenje-budzeta/dto";
 
 type DialogUploadIzvrsenjeBuzetaProps = {
     triggerButton: React.ReactElement;
-    onDataProcessed?: (data:GroupAndMergeResult) => void;
+    onDataProcessed?: (data:IzvrsenjeBudzetaResult) => void;
 };
 export function DialogUploadIzvrsenjeBuzeta({
     triggerButton,

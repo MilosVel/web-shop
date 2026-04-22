@@ -8,12 +8,12 @@ import { FileSpreadsheet } from 'lucide-react';
 import { DialogUploadIzvrsenjeBuzeta } from "@/features/izvrsenje-budzeta/components";
 import { ExportExcel } from "@/shared/components/export-excel";
 import { useState } from "react";
-import type { GroupAndMergeResult } from "@/features/izvrsenje-budzeta/dto";
+import type { IzvrsenjeBudzetaResult } from "@/features/izvrsenje-budzeta/dto";
 
 export default function IzvrsenjeBudzetaPage() {
-    const [izvrsenjeBuzetaPoKontima, setIzvrsenjeBudzeta] = useState<GroupAndMergeResult | null>(null);
+    const [izvrsenjeBuzetaResult, setIzvrsenjeBudzeta] = useState<IzvrsenjeBudzetaResult | null>(null);
 
-    const handleDataProcessed = (data:GroupAndMergeResult) => {
+    const handleDataProcessed = (data:IzvrsenjeBudzetaResult) => {
         setIzvrsenjeBudzeta(data);
       
     }
@@ -29,10 +29,10 @@ export default function IzvrsenjeBudzetaPage() {
                         }
                         onDataProcessed={handleDataProcessed}
                     />
-                    {izvrsenjeBuzetaPoKontima && izvrsenjeBuzetaPoKontima.izvrsenjeBuzetaPoKontima.length > 0 && (
+                    {izvrsenjeBuzetaResult && izvrsenjeBuzetaResult.izvrsenjeBuzetaPoKontima.length > 0 && (
                         <ExportExcel 
-                            data={izvrsenjeBuzetaPoKontima.izvrsenjeBuzetaPoKontima} 
-                            header={izvrsenjeBuzetaPoKontima.header} 
+                            data={izvrsenjeBuzetaResult.izvrsenjeBuzetaPoKontima} 
+                            header={izvrsenjeBuzetaResult.header} 
                             fileName={'Plan i Izvrsenje izvestaj.xlsx'} 
                         />
                     )}

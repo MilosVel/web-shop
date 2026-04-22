@@ -15,14 +15,14 @@ import { Input, Label } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch/switch';
 import { useEffect } from 'react';
 
-import type { GroupAndMergeResult } from "@/features/izvrsenje-budzeta/dto";
+import type { IzvrsenjeBudzetaResult } from "@/features/izvrsenje-budzeta/dto";
 
 export function IzvrsenjeBudzetaForm({ 
     closeCreteTable, 
     onDataProcessed 
 }: { 
     closeCreteTable: () => void;
-    onDataProcessed?: (data:GroupAndMergeResult) => void;
+    onDataProcessed?: (data:IzvrsenjeBudzetaResult) => void;
 }) {
     const [percentageUploaded, setPercentageUploaded] = useState(0);
     const [isProcessing, setIsProcessing] = useState(false);
