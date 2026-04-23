@@ -162,7 +162,7 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
 
             if (aopKey) {
                 // Create array with fixed structure: [plan, 0, 0, 0, 0, 0, ukupnoIzvrsenje]
-                const aopItemForISPFIIzvrsenjeBudzeta = [plan, 0, 0, 0, 0, 0];
+                const aopItemForISPFIIzvrsenjeBudzeta = [plan, 0, 0, 0, 0, 0,0];
                 
                 // Map rest keys to indices (1-5) and set values
                 Object.entries(aopColumns).forEach(([brojISPFIkolone, value]) => {
