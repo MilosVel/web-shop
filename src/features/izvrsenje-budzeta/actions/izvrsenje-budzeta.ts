@@ -149,22 +149,31 @@ export async function createIzvrsenjeBudzeta(izvrsenjeData: izvrsenjeItem[], pla
 
             const aopColumns = getAopColumns(izvrsenjeRow, izvoriData);
 
+
+            if(izvrsenjeRow?.konto ==='4235'){
+                console.log('IZvrsje row:', izvrsenjeRow)
+                console.log('IZvori:', izvoriData)
+                console.log('AOP columns:', aopColumns)
+                
+            }
+                
+
             const aopKey = AOP_ARRAY.find(item => item.konto === +konto)?.aop;
 
             if (aopKey) {
                 // Create array with fixed structure: [plan, 0, 0, 0, 0, 0, ukupnoIzvrsenje]
-                const aopItemForISPFIIzvrsenjeBudzeta = [plan, 0, 0, 0, 0, 0, ukupnoIzvrsenje];
+                const aopItemForISPFIIzvrsenjeBudzeta = [plan, 0, 0, 0, 0, 0];
                 
                 // Map rest keys to indices (1-5) and set values
                 Object.entries(aopColumns).forEach(([brojISPFIkolone, value]) => {
 
                     const index = parseInt(brojISPFIkolone) - RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP;
 
-                    if (index >= 1 && index <= RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP) {
+                    // if (index >= 1 && index <= RAZLIKA_IZMEDJU_BROJA_ISPFI_KOLONE_I_INDEXA_ZA_AOP) {
                         aopItemForISPFIIzvrsenjeBudzeta[index] = value;
-                    }else{
-                        console.log('Greska: Index van opsega', index);
-                    }
+                    // }else{
+                    //     console.log('Greska: Index van opsega', index);
+                    // }
 
                 });
                 
