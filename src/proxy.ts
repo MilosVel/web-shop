@@ -4,8 +4,9 @@ import {
     updateUserSessionExpiration,
 } from "./auth/core/session"
 
-const privateRoutes = ["/private", '/', '/spiri', '/create-table'] // mora se dodati  '/' inace se vidi sidebar kada je user izlogovan. Takodje se mora dodati i '/spiri' inace ce toj ruti moci da se pristupi i kada uzer nije ulogovan
-const adminRoutes = ["/admin"]
+const privateRoutes = ["/private", '/', '/spiri', '/create-table', "/admin"] // mora se dodati  '/' inace se vidi sidebar kada je user izlogovan. Takodje se mora dodati i '/spiri' inace ce toj ruti moci da se pristupi i kada uzer nije ulogovan
+// const adminRoutes = ["/admin"] // rprivremeno cemo admn page prebaciti i u privateRoutes
+const adminRoutes = ["/admin________"] // rprivremeno cemo admn page prebaciti i u privateRoutes
 
 export async function proxy(request: NextRequest) { // middleware je ples izmedju response i requesta
     const response = (await middlewareAuth(request)) ?? NextResponse.next()
