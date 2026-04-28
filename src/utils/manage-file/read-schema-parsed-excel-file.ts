@@ -165,7 +165,8 @@ async function parseWorkbook(file: File): Promise<XLSX.WorkBook> {
 // Multiple sheets - workbook parsed once
 export async function readMultipleExcelSheets<T extends unknown[]>(
     file: File,
-    sheets: { [K in keyof T]: SheetOptions<T[K]> }
+    // sheets: { [K in keyof T]: SheetOptions<T[K]> }
+    sheets: [...{ [K in keyof T]: SheetOptions<T[K]> }]
 ): Promise<{ [K in keyof T]: T[K][] }> {
     const workbook = await parseWorkbook(file);
 
