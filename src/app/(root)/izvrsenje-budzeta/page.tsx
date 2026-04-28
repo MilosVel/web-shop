@@ -29,17 +29,12 @@ export default function IzvrsenjeBudzetaPage() {
   return (
     <ContentLayout routeTitle="Plan i izvrsenje">
       <div className="flex flex-row justify-start gap-24">
-        <div className="gap-x-3 border-2 rounded border-gray-100">
-        
-           <a
-          className="group bg-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 transition cursor-pointer borderBlack dark:bg-white/10"
-          href='/Uputstvo.xlsx'
-          download
-        >
-          Preuzmi Uptstvo{" "}
-          <FileSpreadsheet className="opacity-60 group-hover:translate-y-1 transition" />
-        </a>
- </div>
+      <Button
+                    icon={<FileSpreadsheet />}
+                    className="bg-green-600 text-white"
+                >
+                    <a  href='/Uputstvo.xlsx' download>Preuzmi Uptstvo</a>
+                </Button>
         <div className="flex flex-rpw gap-x-3">
           <DialogUploadIzvrsenjeBuzeta
             triggerButton={
